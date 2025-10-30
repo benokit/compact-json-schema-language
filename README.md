@@ -22,11 +22,11 @@ Each CJSL definition can be translated to a **standard JSON Schema**.
 
 A schema file is itself JSON and consists of:
 
-```json
+```jsonc
 {
   "id": "schema-id",
   "data": { /* schema definition */ },
-  "locals": [ /* optional local definitions */ ]
+  "locals": { /* optional local definitions */ }
 }
 ```
 
@@ -45,15 +45,12 @@ A schema file is itself JSON and consists of:
     "nicks[]": "string",
     "emails[]": "@#email"
   },
-  "locals": [
-    {
-      "id": "email",
-      "data": {
-        "purpose=1": ["home", "office"],
-        "!email": "string"
-      }
+  "locals": {
+    "email": {
+      "purpose=1": ["home", "office"],
+      "!email": "string"
     }
-  ]
+  }
 }
 ```
 
@@ -191,15 +188,12 @@ Enclosing modifiers provide syntactic sugar for `[]`, `{}`, and `()`.
 Local schemas are reusable fragments embedded in the same document.
 
 ```json
-"locals": [
-  {
-    "id": "email",
-    "data": {
-      "!email": "string",
-      "purpose=1": ["home", "office"]
-    }
+"locals": {
+  "email": {
+    "!email": "string",
+    "purpose=1": ["home", "office"]
   }
-]
+}
 ```
 
 Referenced using `@#email`.
@@ -223,15 +217,12 @@ Referenced using `@#email`.
     "nicks[]": "string",
     "emails[]": "@#email"
   },
-  "locals": [
-    {
-      "id": "email",
-      "data": {
-        "purpose=1": ["home", "office"],
-        "!email": "string"
-      }
+  "locals": {
+    "email": {
+      "purpose=1": ["home", "office"],
+      "!email": "string"
     }
-  ]
+  }
 }
 ```
 

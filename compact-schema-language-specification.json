@@ -3,28 +3,24 @@
         "description": "compact json schema language definition",
         "lang=": "compact-json-schema-language",
         "id": "compact-json-schema",
-        "data#1":
-            {
-                "lang=": "compact-json-schema-language", 
-                "!id": "string",
-                "!data": "@#compact-json-schema-data",
-                "locals[]": "@#compact-json-schema"
-            },
-        "locals": [
-            {
-                "id": "compact-json-schema-data",
-                "data#": [
-                    "null",
-                    "string",
-                    "number",
-                    "boolean",
-                    "object",
-                    "any",
-                    "{@#compact-json-schema-data}",
-                    "[@#compact-json-schema-data]"
-                ]
-            }
-        ],
+        "data#1": {
+            "lang=": "compact-json-schema-language",
+            "!id": "string",
+            "!data": "@#compact-json-schema-data",
+            "locals": "{@#compact-json-schema-data}"
+        },
+        "locals": {
+            "compact-json-schema-data#": [
+                "null",
+                "string",
+                "number",
+                "boolean",
+                "object",
+                "any",
+                "{@#compact-json-schema-data}",
+                "[@#compact-json-schema-data]"
+            ]
+        },
         "semantics": {
             "appending property modifiers": {
                 "#": {
@@ -239,7 +235,7 @@
                                 }
                             }
                         }
-                    ] 
+                    ]
                 }
             },
             "prepending type modifiers": {
@@ -340,18 +336,15 @@
                 "nicks[]": "string",
                 "emails[]": "@#email"
             },
-            "locals": [
-                {
-                    "id": "email",
-                    "data": {
-                        "purpose=1": [
-                            "home",
-                            "office"
-                        ],
-                        "!email": "string"
-                    }
+            "locals": {
+                "email": {
+                    "purpose=1": [
+                        "home",
+                        "office"
+                    ],
+                    "!email": "string"
                 }
-            ]
+            }
         }
     }
 ]

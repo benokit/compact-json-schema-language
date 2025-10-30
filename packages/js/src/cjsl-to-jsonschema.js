@@ -71,7 +71,7 @@ const codeToSchemaGenerator = {
   '()': (value) => ({
     type: 'array',
     additionalItems: false,
-    items: acceptIfArray(value).map(parseValue)
+    items: acceptIfArray(isString(value) ? value.split(',') : value).map(parseValue)
   }),
   '$$': (value) => acceptIfObject(value),
   '@': (value) => ({
@@ -80,6 +80,13 @@ const codeToSchemaGenerator = {
   '@#': (value) => ({
     '$ref': '#/$defs/' + value
   })
+}
+
+function getTypeSchema(type) {
+  if (primitiveTypes.has(type)) {
+    return { type };
+  }
+  throw new TypeError(`Unsupported primitive type ${type}`); 
 }
 
 function parseValue(value) {
@@ -95,12 +102,6 @@ function parseValue(value) {
 }
 
 function parseValueString(value) {
-  if (primitiveTypes.has(value)) {
-    return {
-      type: value
-    };
-  }
-
   const prefixes = ['(', '{', '[', '@#', '@', ''];
   const postfixes = [')', '}', ']', ''];
 
@@ -116,6 +117,10 @@ function parseValueString(value) {
 
   const internalValue = value.slice(prefix.length, value.length - postfix.length)
   const code = prefix + postfix;
+
+  if (code === '') {
+    return getTypeSchema(value);
+  }
 
   return codeToSchemaGenerator[code](internalValue);
 }

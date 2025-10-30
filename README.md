@@ -69,7 +69,6 @@ CJSL supports the following primitive and composite data types:
 | `number`        | numeric value      |
 | `boolean`       | boolean value      |
 | `object`        | JSON object        |
-| `any`           | any JSON value     |
 | `{T}`           | dictionary of `T`  |
 | `[T]`           | array of `T`       |
 | `(T1, T2, ...)` | fixed-length tuple |

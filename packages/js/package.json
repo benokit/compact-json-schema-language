@@ -1,16 +1,49 @@
 {
-  "name": "js",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "@benokit/js-cjsl",
+  "version": "0.1.0",
+  "main": "./src/cjsl-to-jsonschema.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "prepack": "mocha"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "json",
+    "schema",
+    "commonjs"
+  ],
+  "author": "Benjamin Batistic",
   "license": "MIT",
-  "description": "",
+  "description": "Conversion from compact json schema language to standard json schema",
   "devDependencies": {
     "chai": "^6.2.0",
     "mocha": "^11.7.4"
+  },
+  "exports": {
+    ".": {
+      "require": "./src/cjsl-to-jsonschema.js",
+      "default": "./src/cjsl-to-jsonschema.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/benokit/compact-json-schema-language.git"
+  },
+  "bugs": {
+    "url": "https://github.com/benokit/compact-json-schema-language/issues"
+  },
+  "homepage": "https://github.com/benokit/compact-json-schema-language/#readme",
+  "engines": {
+    "node": ">=16"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

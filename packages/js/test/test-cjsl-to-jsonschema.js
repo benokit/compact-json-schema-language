@@ -280,4 +280,18 @@ describe('compactToStandard', () => {
         };
         expect(() => compactToStandard(compact)).to.throw();
     });
+
+    it('should parse pattern', () => {
+        const compact = {
+            id: 'test',
+            data: 'string:.*'
+        };
+         const expectedStandard = {
+            $id: 'test',
+            type: 'string',
+            pattern: '.*'
+        };
+        const standard = compactToStandard(compact);
+        expect(standard).to.deep.equal(expectedStandard);
+    });
 });

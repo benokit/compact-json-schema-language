@@ -3,16 +3,20 @@ module.exports = {
 };
 
 function compactToStandard(compactSchema) {
-  const { id: $id } = compactSchema;
-  const schemaData = { ...compactSchema }
-  delete schemaData.id;
+  const { id: $id, locals } = compactSchema;
 
-  const { properties: { data, locals }} = parseObject(schemaData);
+  const dataProperty = Object.keys(compactSchema).find(key => key.startsWith('data'));
+  const schemaData = { 
+    [dataProperty]: compactSchema[dataProperty],
+    locals 
+  }
+
+  const { properties } = parseObject(schemaData);
 
   return {
     $id,
-    ...data,
-    ...(locals?.properties !== undefined && { $defs: { ...locals.properties } })
+    ...properties.data,
+    ...(properties.locals?.properties !== undefined && { $defs: { ...properties.locals.properties } })
   };
 }
 
@@ -86,6 +90,16 @@ function getTypeSchema(type) {
   if (primitiveTypes.has(type)) {
     return { type };
   }
+
+  const [value, pattern] = splitAtFirstColon(type);
+  
+  if (pattern !== '') {
+    return {
+      ...getTypeSchema(value),
+      pattern
+    }
+  }
+
   throw new TypeError(`Unsupported primitive type ${type}`); 
 }
 
@@ -133,8 +147,8 @@ function parseObject(object) {
   };
 
   for (const property in object) {
+    if (!object[property]) continue;
     const {prefix, name, postfix: code} = parseProperty(property);
-    console.log(name);
     if (prefix === '!') {
       schema.required.push(name);
     }
@@ -167,4 +181,10 @@ function isPlainObject(value) {
 
   const proto = Object.getPrototypeOf(value);
   return proto === null || proto === Object.prototype;
+}
+
+function splitAtFirstColon(str) {
+  const index = str.indexOf(':');
+  if (index === -1) return [str, ''];
+  return [str.slice(0, index), str.slice(index + 1)];
 }

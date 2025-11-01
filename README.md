@@ -199,6 +199,12 @@ Referenced using `@#email`.
 
 ---
 
+## Special properties
+
+| Property        | Meaning            |
+| --------------- | ------------------ |
+| `//`            | description        |
+
 ## Example: Full Schema
 
 **Compact**

@@ -1,7 +1,3 @@
-module.exports = {
-  compactToStandard
-};
-
 function compactToStandard(compactSchema) {
   const { id: $id, locals } = compactSchema;
 
@@ -14,7 +10,7 @@ function compactToStandard(compactSchema) {
   const { properties } = parseObject(schemaData);
 
   return {
-    $id,
+    ...($id !== undefined && { $id }),
     ...properties.data,
     ...(properties.locals?.properties !== undefined && { $defs: { ...properties.locals.properties } })
   };
@@ -188,3 +184,7 @@ function splitAtFirstColon(str) {
   if (index === -1) return [str, ''];
   return [str.slice(0, index), str.slice(index + 1)];
 }
+
+export {
+  compactToStandard
+};

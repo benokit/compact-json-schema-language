@@ -1,5 +1,5 @@
-const { expect } = require('chai');
-const { compactToStandard } = require('../src/cjsl-to-jsonschema');
+import { expect } from 'chai';
+import { compactToStandard } from '../src/cjsl-to-jsonschema.js';
 
 describe('compactToStandard', () => {
     it('should parse unstructured', () => {
@@ -293,5 +293,16 @@ describe('compactToStandard', () => {
         };
         const standard = compactToStandard(compact);
         expect(standard).to.deep.equal(expectedStandard);
+    });
+
+    it('should parse if id is not defined', () => {
+        const compact = {
+            data: 'string'
+        };
+         const expectedStandard = {
+            type: 'string'
+        };
+        const standard = compactToStandard(compact);
+        expect(standard).to.deep.equal(expectedStandard); 
     });
 });

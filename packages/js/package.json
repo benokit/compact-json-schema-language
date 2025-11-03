@@ -1,11 +1,12 @@
 {
   "name": "@benokit/js-cjsl",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "./src/cjsl-to-jsonschema.js",
   "scripts": {
     "test": "mocha",
     "prepack": "mocha"
   },
+  "type": "module",
   "keywords": [
     "json",
     "schema",
@@ -20,7 +21,7 @@
   },
   "exports": {
     ".": {
-      "require": "./src/cjsl-to-jsonschema.js",
+      "import": "./src/cjsl-to-jsonschema.js",
       "default": "./src/cjsl-to-jsonschema.js"
     },
     "./package.json": "./package.json"

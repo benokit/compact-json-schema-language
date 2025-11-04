@@ -13,8 +13,8 @@ Converts compact json schema (CJSL) to standard json schema.
 const { compactToStandard } = require('@benokit/js-cjsl');
 
 const example = {
-    id: 'person',
-    data: {
+    $id: 'person',
+    $data: {
       name: 'string',
       address: {
         street: 'string',
@@ -24,7 +24,7 @@ const example = {
       'nicks[]': 'string',
       'emails[]': '@#email',
     },
-    locals: {
+    $locals: {
       email: {
           'purpose=1': ['home', 'office'],
           '!email': 'string',

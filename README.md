@@ -24,9 +24,9 @@ A schema file is itself JSON and consists of:
 
 ```jsonc
 {
-  "id": "schema-id",
-  "data": { /* schema definition */ },
-  "locals": { /* optional local definitions */ }
+  "$id": "schema-id",
+  "$data": { /* schema definition */ },
+  "$locals": { /* optional local definitions */ }
 }
 ```
 
@@ -187,7 +187,7 @@ Enclosing modifiers provide syntactic sugar for `[]`, `{}`, and `()`.
 Local schemas are reusable fragments embedded in the same document.
 
 ```json
-"locals": {
+"$locals": {
   "email": {
     "!email": "string",
     "purpose=1": ["home", "office"]
@@ -198,12 +198,6 @@ Local schemas are reusable fragments embedded in the same document.
 Referenced using `@#email`.
 
 ---
-
-## Special properties
-
-| Property        | Meaning            |
-| --------------- | ------------------ |
-| `//`            | description        |
 
 ## Example: Full Schema
 

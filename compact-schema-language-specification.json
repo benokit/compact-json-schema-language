@@ -2,14 +2,18 @@
     {
         "description": "compact json schema language definition",
         "lang=": "compact-json-schema-language",
-        "id": "compact-json-schema",
-        "data#1": {
-            "lang=": "compact-json-schema-language",
-            "!id": "string",
-            "!data": "@#compact-json-schema-data",
-            "locals": "{@#compact-json-schema-data}"
-        },
-        "locals": {
+        "$id": "compact-json-schema",
+        "$data#": [
+            {
+                "$id": "string",
+                "!$data": "@compact-json-schema-data",
+                "$locals{}": "@compact-json-schema"
+            },
+            {
+                "$data{}": "@#compact-json-schema-data"
+            }
+        ],
+        "$locals": {
             "compact-json-schema-data#": [
                 "null",
                 "string",
@@ -17,8 +21,8 @@
                 "boolean",
                 "object",
                 "any",
-                "{@#compact-json-schema-data}",
-                "[@#compact-json-schema-data]"
+                "{@compact-json-schema}",
+                "[@compact-json-schema]"
             ]
         },
         "semantics": {
@@ -325,8 +329,8 @@
     },
     {
         "example": {
-            "id": "person",
-            "data": {
+            "$id": "person",
+            "$data": {
                 "name": "string",
                 "address": {
                     "street": "string",
@@ -336,7 +340,7 @@
                 "nicks[]": "string",
                 "emails[]": "@#email"
             },
-            "locals": {
+            "$locals": {
                 "email": {
                     "purpose=1": [
                         "home",

@@ -1,19 +1,52 @@
 function compactToStandard(compactSchema) {
-  const { id: $id, locals } = compactSchema;
+  const dataProperty = Object.keys(compactSchema).find(key => key.startsWith('$data'));
 
-  const dataProperty = Object.keys(compactSchema).find(key => key.startsWith('data'));
-  const schemaData = { 
-    [dataProperty]: compactSchema[dataProperty],
-    locals 
+  if (dataProperty) {
+    const { $id, $locals } = compactSchema;
+
+    const schemaData = { 
+      [dataProperty.slice(1)]: compactSchema[dataProperty],
+      locals: $locals
+    }
+
+    const { properties } = parseObject(schemaData);
+
+    return {
+      ...($id !== undefined && { $id }),
+      ...properties.data,
+      ...(properties.locals?.properties !== undefined && { $defs: { ...properties.locals.properties } })
+    };
   }
 
-  const { properties } = parseObject(schemaData);
+  return parseObject(compactSchema);
+}
 
-  return {
-    ...($id !== undefined && { $id }),
-    ...properties.data,
-    ...(properties.locals?.properties !== undefined && { $defs: { ...properties.locals.properties } })
+function parseObject(object) {
+  const dataProperty = Object.keys(object).find(key => key.startsWith('$data'));
+  if (dataProperty) {
+    return compactToStandard(object);
+  }
+
+  const schema = {
+    type: 'object',
+    required: [],
+    properties: {}
   };
+
+  for (const property in object) {
+    if (!object[property]) continue;
+    const {prefix, name, postfix: code} = parseProperty(property);
+    if (prefix === '!') {
+      schema.required.push(name);
+    }
+    schema.properties[name] = codeToSchemaGenerator[code](object[property]);
+  }
+
+  if (schema.required.length === 0) {
+    delete schema.required;
+  }
+
+  return schema;
 }
 
 function parseProperty(property) {
@@ -133,25 +166,6 @@ function parseValueString(value) {
   }
 
   return codeToSchemaGenerator[code](internalValue);
-}
-
-function parseObject(object) {
-  const schema = {
-    type: 'object',
-    required: [],
-    properties: {}
-  };
-
-  for (const property in object) {
-    if (!object[property]) continue;
-    const {prefix, name, postfix: code} = parseProperty(property);
-    if (prefix === '!') {
-      schema.required.push(name);
-    }
-    schema.properties[name] = codeToSchemaGenerator[code](object[property]);
-  }
-
-  return schema;
 }
 
 function isString(value) {

@@ -344,4 +344,11 @@ describe('compactToStandard', () => {
         const standard = compactToStandard(compact);
         expect(standard).to.deep.equal(expectedStandard); 
     });
+
+    it('should return empty if empty', () => {
+        const compact = {};
+        const expectedStandard = {}
+        const standard = compactToStandard(compact);
+        expect(standard).to.deep.equal(expectedStandard); 
+    });
 });

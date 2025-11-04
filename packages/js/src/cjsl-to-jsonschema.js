@@ -22,6 +22,10 @@ function compactToStandard(compactSchema) {
 }
 
 function parseObject(object) {
+  if (Object.keys(object).length === 0) {
+    return {};
+  }
+
   const dataProperty = Object.keys(object).find(key => key.startsWith('$data'));
   if (dataProperty) {
     return compactToStandard(object);

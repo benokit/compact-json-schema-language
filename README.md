@@ -18,18 +18,6 @@ Each CJSL definition can be translated to a **standard JSON Schema**.
 
 ---
 
-## Basic Structure
-
-A schema file is itself JSON and consists of:
-
-```jsonc
-{
-  "$id": "schema-id",
-  "$data": { /* schema definition */ },
-  "$locals": { /* optional local definitions */ }
-}
-```
-
 ### Example
 
 ```json

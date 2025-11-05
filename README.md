@@ -34,8 +34,8 @@ A schema file is itself JSON and consists of:
 
 ```json
 {
-  "id": "person",
-  "data": {
+  "$id": "person",
+  "$data": {
     "name": "string",
     "address": {
       "street": "string",
@@ -45,7 +45,7 @@ A schema file is itself JSON and consists of:
     "nicks[]": "string",
     "emails[]": "@#email"
   },
-  "locals": {
+  "$locals": {
     "email": {
       "purpose=1": ["home", "office"],
       "!email": "string"
@@ -57,6 +57,14 @@ A schema file is itself JSON and consists of:
 This defines a `person` schema with local type `email`.
 
 ---
+
+## Special properties
+
+| Property | Meaning | Location | Supports modifiers |
+|-|-|-|-|
+| `$id`| schema id | top level only, otherwise a normal property | no |
+| `$data` | hook for inline schema definition | everywhere | yes |
+| `$locals` | dictionary of local schema definitions | top level only, otherwise a normal property | no | 
 
 ## Core Data Types
 
@@ -98,32 +106,43 @@ CJSL uses **modifiers** to express schema semantics compactly.
 **Compact**
 
 ```json
-{ "data#": ["string", "object"] }
+{ "$data#": ["string", "object"] }
 ```
 
 **Standard**
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "data": {
-      "anyOf": [
-        { "type": "string" },
-        { "type": "object" }
-      ]
-    }
-  }
+  "anyOf": [
+    { "type": "string" },
+    { "type": "object" }
+  ]
 }
 ```
 
 #### Example: `enum`
 
+**Compact**
+
 ```json
 { "status=1": ["active", "inactive"] }
 ```
 
-→ `"enum": ["active", "inactive"]`
+**Standard**
+
+```json
+{
+  "type": "objects",
+  "properties": {
+    "status": {
+      "enum": [
+        "active",
+        "inactive"
+      ]
+    }
+  }
+}
+```
 
 ---
 
@@ -135,11 +154,27 @@ CJSL uses **modifiers** to express schema semantics compactly.
 
 #### Example
 
+**Compact**
+
 ```json
 { "!data": "string" }
 ```
 
-→ required `"data"` property of type string.
+**Standard**
+
+```json
+{
+  "type": "objects",
+  "required": [
+    "data"
+  ],
+  "properties": {
+    "data": {
+      "type": "string"
+    }
+  }
+}
+```
 
 ---
 
@@ -151,14 +186,6 @@ CJSL uses **modifiers** to express schema semantics compactly.
 | -------- | -------------------------- | ---------------------------- |
 | `@`      | reference external schema  | `"$ref": "schema-id"`        |
 | `@#`     | reference local definition | `"$ref": "#/$defs/local-id"` |
-
-#### Example
-
-```json
-{ "email": "@#email-type" }
-```
-
-→ property references a locally defined schema.
 
 ---
 
@@ -205,8 +232,8 @@ Referenced using `@#email`.
 
 ```json
 {
-  "id": "person",
-  "data": {
+  "$id": "person",
+  "$data": {
     "name": "string",
     "address": {
       "street": "string",
@@ -216,7 +243,7 @@ Referenced using `@#email`.
     "nicks[]": "string",
     "emails[]": "@#email"
   },
-  "locals": {
+  "$locals": {
     "email": {
       "purpose=1": ["home", "office"],
       "!email": "string"
@@ -267,16 +294,66 @@ Referenced using `@#email`.
 
 ---
 
-## Implementation Notes
+## Learn through complete minimal examples
 
-* Each schema object must include:
+#### Object without `$data` property is equivalent to `type: "object"`
 
-  * `"id"` — unique schema identifier.
-  * `"data"` — compact schema definition.
-* Optional `"locals"` can define embedded, reusable sub-schemas.
-* Modifiers may be combined logically (e.g., `!data[]`).
+**Compact**
 
----
+```json
+{
+  "name": "string",
+  "age": "number"
+}
+```
+
+**Standard**
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "name": { "type": "string" },
+    "age": { "type": "number" }
+  }
+}
+```
+
+#### Object with `$data` property is equivalent to an inlined standard schema
+
+**Compact**
+
+```json
+{
+  "$data#1": [
+    "string",
+    {
+      "$data#": ["number", "[number]"]
+    }
+  ]
+}
+```
+
+**Standard**
+
+```json
+{
+  "oneOf": [
+    { "type": "string" },
+    {
+      "anyOf": [
+        { "type": "number" },
+        {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        }
+      ]
+    }
+  ]
+}
+```
 
 ## License
 

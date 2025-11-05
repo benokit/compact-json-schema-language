@@ -10,7 +10,7 @@ Language definition: [CJSL](https://github.com/benokit/compact-json-schema-langu
 Converts compact json schema (CJSL) to standard json schema.
 
 ```js
-const { compactToStandard } = require('@benokit/js-cjsl');
+import { compactToStandard } from '@benokit/js-cjsl';
 
 const example = {
     $id: 'person',

@@ -1,6 +1,6 @@
 {
   "name": "@benokit/js-cjsl",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "main": "./src/cjsl-to-jsonschema.js",
   "scripts": {
     "test": "mocha",

@@ -1,4 +1,12 @@
 function compactToStandard(compactSchema) {
+  if (Array.isArray(compactSchema)) {
+    return compactToStandard({ '$data#': compactSchema });
+  }
+
+  if (!isPlainObject(compactSchema)) {
+    return compactToStandard({ $data: compactSchema });
+  }
+
   const dataProperty = Object.keys(compactSchema).find(key => key.startsWith('$data'));
 
   if (dataProperty) {

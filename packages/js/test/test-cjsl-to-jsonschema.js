@@ -347,7 +347,28 @@ describe('compactToStandard', () => {
 
     it('should return empty if empty', () => {
         const compact = {};
-        const expectedStandard = {}
+        const expectedStandard = {};
+        const standard = compactToStandard(compact);
+        expect(standard).to.deep.equal(expectedStandard); 
+    });
+
+    it('should parse direct type', () => {
+        const compact = 'string';
+        const expectedStandard = {
+            type: 'string'
+        };
+        const standard = compactToStandard(compact);
+        expect(standard).to.deep.equal(expectedStandard); 
+    });
+
+    it('should parse direct any of', () => {
+        const compact = ['string', 'number'];
+        const expectedStandard = {
+            anyOf: [
+                { type: 'string' }, 
+                { type: 'number' }
+            ]
+        };
         const standard = compactToStandard(compact);
         expect(standard).to.deep.equal(expectedStandard); 
     });

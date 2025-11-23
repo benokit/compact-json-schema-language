@@ -4,9 +4,13 @@
         "lang=": "compact-json-schema-language",
         "$id": "compact-json-schema",
         "$data#": [
+            "@#compact-json-schema-data",
+            {
+                "$data[]": "@#compact-json-schema-data"
+            },
             {
                 "$id": "string",
-                "!$data": "@compact-json-schema-data",
+                "!$data": "@#compact-json-schema-data",
                 "$locals{}": "@compact-json-schema"
             },
             {
@@ -15,14 +19,16 @@
         ],
         "$locals": {
             "compact-json-schema-data#": [
-                "null",
+                "@#json-schema-primitive",
+                "{@compact-json-schema}",
+                "[@compact-json-schema]"
+            ],
+            "json-schema-primitive=1": [
+                null,
                 "string",
                 "number",
                 "boolean",
-                "object",
-                "any",
-                "{@compact-json-schema}",
-                "[@compact-json-schema]"
+                "object"
             ]
         },
         "semantics": {
@@ -262,7 +268,7 @@
                     ]
                 },
                 "@#": {
-                    "type is": "referenced from a locals",
+                    "type is": "referenced from locals",
                     "examples": [
                         {
                             "compact": {
